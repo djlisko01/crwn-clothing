@@ -4,7 +4,13 @@ const Directory = ({ categories }) => {
   return (
     <div className="categories-container">
       {categories.map(({ id, title, imageUrl }) => {
-        return <CategoryItem key={id} title={title} imageUrl={imageUrl} />;
+        return (
+          <CategoryItem
+            key={id}
+            title={title.toLocaleUpperCase()}
+            imageUrl={imageUrl}
+          />
+        );
       })}
     </div>
   );

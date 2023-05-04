@@ -1,18 +1,23 @@
-import Directory from "./components/directory/directory.component";
-import { useEffect, useState } from "react";
-const App = () => {
-  const [categories, setCategories] = useState([]);
+import Home from "./routes/home/home.component";
+import Navigation from "./routes/navigation/navigation.component";
+import { Routes, Route } from "react-router-dom";
 
-  useEffect(() => {
-    fetch("https://cdn.fs.teachablecdn.com/jXxMUj86Qf2pChV37EzI")
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
-  }, []);
-
+const Shop = () => {
   return (
-    <div className="App">
-      <Directory categories={categories} />
+    <div>
+      <h1>I am the shop</h1>
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+      </Route>
+    </Routes>
   );
 };
 
