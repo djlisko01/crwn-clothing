@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import Directory from "./components/directory/directory.component";
+import { useEffect, useState } from "react";
+const App = () => {
+  const [categories, setCategories] = useState([]);
 
-function App() {
+  useEffect(() => {
+    fetch("https://cdn.fs.teachablecdn.com/jXxMUj86Qf2pChV37EzI")
+      .then((res) => res.json())
+      .then((data) => setCategories(data));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Directory categories={categories} />
     </div>
   );
-}
+};
 
 export default App;
