@@ -3,10 +3,12 @@ import FormInput from "../form-input/form-input.component";
 import "./sign-up.style.scss";
 import Button from "../button/button.component";
 
-const SignUpForm = ({
-  createUserWithEmailAndPassword,
+import {
   createUserDocFromAuth,
-}) => {
+  createAuthUserWithEmailAndPassword,
+} from "../../utils/firebase/firebase.utils";
+
+const SignUpForm = () => {
   const defaultFormFields = {
     displayName: "",
     email: "",
@@ -34,10 +36,14 @@ const SignUpForm = ({
     }
 
     try {
-      const { user } = await createUserWithEmailAndPassword(email, password);
-      const userDocRef = await createUserDocFromAuth(user, {
+      const { user } = await createAuthUserWithEmailAndPassword(
+        email,
+        password,
+      );
+      await createUserDocFromAuth(user, {
         displayName: displayName,
       });
+
       resetFields();
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
