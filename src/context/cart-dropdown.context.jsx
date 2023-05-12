@@ -39,6 +39,15 @@ const decrementItem = (cartItems, productToDecrement) => {
   }
 };
 
+const deleteItem = (cartItems, productToDelete) => {
+  const itemExist = checkIfItemExist(cartItems, productToDelete);
+
+  if (itemExist) {
+    return cartItems.filter((cartItem) => cartItem.id !== productToDelete.id);
+  }
+  return null;
+};
+
 // Helper functions
 const checkIfItemExist = (cartItems, product) => {
   return cartItems.find((cartItem) => cartItem.id === product.id);
@@ -53,12 +62,24 @@ export const CartContext = createContext({
   decreaseItemInCart: () => {},
   cartCount: 0,
   setCartCount: () => {},
+  deleteItemInCart: () => {},
+  totalPrice: 0,
 });
 
 export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const newTotal = cartItems.reduce(
+      (total, cartItem) => total + cartItem.price * cartItem.quantity,
+      0,
+    );
+
+    setTotalPrice(newTotal);
+  }, [cartItems]);
 
   useEffect(() => {
     const count = cartItems.reduce(
@@ -78,6 +99,10 @@ export const CartProvider = ({ children }) => {
     setCartItems(decrementItem(cartItems, product));
   };
 
+  const deleteItemInCart = (product) => {
+    setCartItems(deleteItem(cartItems, product));
+  };
+
   const value = {
     isCartOpen,
     setIsCartOpen,
@@ -85,6 +110,8 @@ export const CartProvider = ({ children }) => {
     decreaseItemInCart,
     cartItems,
     cartCount,
+    deleteItemInCart,
+    totalPrice,
   };
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
